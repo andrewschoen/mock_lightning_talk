@@ -22,10 +22,6 @@ class HttpTests(unittest.TestCase):
         r = self.http.send_request('http://httpbin.org/status/404')
         self.assertEqual(r.status_code, 404)
 
-    def test_403_status(self):
-        r = self.http.send_request('http://httpbin.org/status/403')
-        self.assertEqual(r.status_code, 403)
-
     def test_challenge_returned(self):
         r = self.http.send_request_with_challenge('http://httpbin.org/get')
         self.assertEqual(r.status_code, 200)
