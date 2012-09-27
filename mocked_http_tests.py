@@ -45,6 +45,7 @@ class HttpTests(unittest.TestCase):
         mock_get_challenge_string.return_value = self.challenge
         r = self.http.send_request_with_challenge('http://httpbin.org/get')
         self.assertEqual(r.status_code, 200)
+        self.assertTrue(self.challenge in r.content)
 
 
 if __name__ == "__main__":
