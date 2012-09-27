@@ -1,7 +1,7 @@
 import unittest
 
 from http_stuff import HttpTester
-from mock import patch
+from mock import patch, MagicMock
 
 HTTP_REQUESTS = 1
 
@@ -43,6 +43,14 @@ class HttpTests(unittest.TestCase):
            content=challenge)
     def test_challenge_returned(self, mock, mock_get_challenge_string):
         mock_get_challenge_string.return_value = self.challenge
+        r = self.http.send_request_with_challenge('http://httpbin.org/get')
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(self.challenge in r.content)
+
+    @patch('requests.get', new_callable=MockResponse, status_code=200,
+           content=challenge)
+    def test_challenge_returned_magic(self, mock):
+        self.http.get_challenge_string = MagicMock(return_value=self.challenge)
         r = self.http.send_request_with_challenge('http://httpbin.org/get')
         self.assertEqual(r.status_code, 200)
         self.assertTrue(self.challenge in r.content)
